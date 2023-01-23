@@ -1,7 +1,7 @@
 App = {
   web3Provider: null,
   contracts: {},
-
+//test
   init: async function() {
     // Load pets.
     $.getJSON('../product.json', function(data) {
