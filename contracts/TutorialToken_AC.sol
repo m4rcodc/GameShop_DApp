@@ -5,12 +5,14 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 
 contract TutorialToken_AC is ERC20, AccessControl {
    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+   address _owner;
 
    constructor(
         string memory name,
         string memory symbol,
         uint256 initialSupply) ERC20(name, symbol) {
       _mint(msg.sender, initialSupply);
+      _owner = msg.sender;
       _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
       _setRoleAdmin(MINTER_ROLE, DEFAULT_ADMIN_ROLE);
    }
@@ -29,6 +31,11 @@ contract TutorialToken_AC is ERC20, AccessControl {
       emit ChecksoloMinters(msg.sender);
       require(isMinter(msg.sender), "Caller is not a minter");
       _;
+   }
+
+   function buyProduct(address from, uint256 amount) public{
+      transferFrom(from, _owner, amount);
+
    }
 
    function isAdmin(address account) public virtual view returns (bool) {

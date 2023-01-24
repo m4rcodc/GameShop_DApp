@@ -8,30 +8,11 @@ App = {
       var productRow = $('#productRow');
       var productTemplate = $('#productTemplate');
       var accountBalance = $('#balance');
+  
       
       var contractInstance;
 
-      /*
-      web3.eth.getAccounts(function(error, accounts) {
-        if (error) {
-          console.log(error);
-        }
-      
-        var account = accounts[0];
-      
-        App.contracts.TutorialToken_AC.deployed().then(function(instance) {
-          contractInstance = instance;
-
-          return contractInstance.balanceOf(account);
-        }).then(function(result) {
-          // return App.markAdopted();
-          console.log("Trasfer success");
-          console.log("Il saldo è " + result);
-        }).catch(function(err) {
-          console.log(err.message);
-        });
-      });    
-*/
+    
       for (i = 0; i < data.length; i ++) {
         productTemplate.find('img').attr('src', data[i].picture);
         productTemplate.find('.product-name').text(data[i].name);
@@ -42,8 +23,6 @@ App = {
 
         productRow.append(productTemplate.html());
       }
-
-      accountBalance.append(300)
 
     });
 
@@ -73,6 +52,8 @@ else {
 }
 web3 = new Web3(App.web3Provider);
 
+
+
 console.log("Sono in initWeb3");
     return App.initContract();
   },
@@ -86,9 +67,11 @@ console.log("Sono in initWeb3");
     
       // Set the provider for our contract
       App.contracts.TutorialToken_AC.setProvider(App.web3Provider);
+
+  
     
       // Use our contract to retrieve and mark the adopted pets
-     return App.markAdopted(); //?
+     //return App.markAdopted(); //?
     });
     
 
@@ -98,13 +81,37 @@ console.log("Sono in initWeb3");
   bindEvents: function() {
     console.log("Sono in bindEvents");
     $(document).on('click', '.btn-adopt', App.handleAdopt);
+   // $(document).on('click', '.btn-admin', App.handleTransferAdmin);
   }, 
 
-  
-  markAdopted: function() {
+/*
+  handleTransferAdmin: function(event) {
+    event.preventDefault();
+    
+    console.log(event.target.value);
+    console.log(event.target);
 
-      $('.panel-product').eq(i).find('button').text('Success').attr('disabled', true);
+    
+    
+  
+    var contractInstance;
+
+    web3.eth.getAccounts(function(error, accounts) {
+
+
+      if (error) {
+        console.log(error);
+      }
+    
+      var account = accounts[0];
+
+
+    }); 
+    
   },
+
+  */
+ 
 
   handleAdopt:  function(event) {
     event.preventDefault();
@@ -121,24 +128,23 @@ console.log("Sono in initWeb3");
       }
     
       var account = accounts[0];
-    
+
+
+
       App.contracts.TutorialToken_AC.deployed().then(function(instance) {
         contractInstance = instance;
       
-        
-        contractInstance.balanceOf(account).then(function(result) {
-          console.log(result);
-      });
-    
         // Execute adopt as a transaction by sending account
-        return contractInstance.transfer(account, price * (10**18), {from: account});
+        return contractInstance.tran(account,price, {from: account});
       }).then(function(result) {
         // return App.markAdopted();
         console.log("Trasfer success");
-        console.log("Il saldo è " + saldo);
+  
+        
       }).catch(function(err) {
         console.log(err.message);
       });
+
     });    
   }
 
@@ -149,3 +155,4 @@ $(function() {
     App.init();
   });
 });
+
