@@ -3,14 +3,13 @@ App = {
   contracts: {},
 //test
   init: async function() {
+
     // Load pets.
     $.getJSON('../product.json', function(data) {
       var productRow = $('#productRow');
       var productTemplate = $('#productTemplate');
       var accountBalance = $('#balance');
-  
-      
-      var contractInstance;
+
 
     
       for (i = 0; i < data.length; i ++) {
@@ -23,6 +22,7 @@ App = {
 
         productRow.append(productTemplate.html());
       }
+
 
     });
 
@@ -59,6 +59,9 @@ console.log("Sono in initWeb3");
   },
 
   initContract: function() {
+
+    var contractInstance;
+    var accountBalance = $('#balance');
     
     $.getJSON('TutorialToken_AC.json', function(data) {
       // Get the necessary contract artifact file and instantiate it with @truffle/contract
@@ -67,6 +70,31 @@ console.log("Sono in initWeb3");
     
       // Set the provider for our contract
       App.contracts.TutorialToken_AC.setProvider(App.web3Provider);
+
+
+      web3.eth.getAccounts(function(error, accounts) {
+        if (error) {
+          console.log(error);
+        }
+      
+        var account = accounts[0];
+  
+        App.contracts.TutorialToken_AC.deployed().then(function(instance) {
+          contractInstance = instance;
+        
+          // Execute adopt as a transaction by sending account
+          return contractInstance.balanceOf(account, {from: account});
+        }).then(function(result) {
+          // return App.markAdopted();
+          console.log("Il saldo è "+ result);
+          accountBalance.append(result/(10 ** 18));
+  
+        }).catch(function(err) {
+          console.log(err.message);
+        });
+  
+      });    
+
 
   
     
@@ -81,37 +109,9 @@ console.log("Sono in initWeb3");
   bindEvents: function() {
     console.log("Sono in bindEvents");
     $(document).on('click', '.btn-adopt', App.handleAdopt);
-   // $(document).on('click', '.btn-admin', App.handleTransferAdmin);
+   
   }, 
 
-/*
-  handleTransferAdmin: function(event) {
-    event.preventDefault();
-    
-    console.log(event.target.value);
-    console.log(event.target);
-
-    
-    
-  
-    var contractInstance;
-
-    web3.eth.getAccounts(function(error, accounts) {
-
-
-      if (error) {
-        console.log(error);
-      }
-    
-      var account = accounts[0];
-
-
-    }); 
-    
-  },
-
-  */
- 
 
   handleAdopt:  function(event) {
     event.preventDefault();
@@ -135,10 +135,10 @@ console.log("Sono in initWeb3");
         contractInstance = instance;
       
         // Execute adopt as a transaction by sending account
-        return contractInstance.tran(account,price, {from: account});
+        return contractInstance.transfer(account,price * (10**18), {from: account});
       }).then(function(result) {
         // return App.markAdopted();
-        console.log("Trasfer success");
+        console.log("Il saldo è "+ result);
   
         
       }).catch(function(err) {
