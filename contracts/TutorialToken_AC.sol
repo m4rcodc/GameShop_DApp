@@ -33,8 +33,8 @@ contract TutorialToken_AC is ERC20, AccessControl {
       _;
    }
 
-   function buyProduct(address from, uint256 amount) public{
-      transferFrom(from, _owner, amount);
+   function buyProduct(uint256 amount) public virtual returns(bool) {
+      return transfer(_owner, amount);
 
    }
 
@@ -44,6 +44,10 @@ contract TutorialToken_AC is ERC20, AccessControl {
 
    function isMinter(address account) public virtual view returns (bool) {
       return hasRole(MINTER_ROLE, account);
+   }
+
+   function showOwner() public virtual view returns(address){
+      return _owner;
    }
 
    function mint(address to, uint256 amount) public soloMinters {
@@ -58,6 +62,8 @@ contract TutorialToken_AC is ERC20, AccessControl {
     function removeMinterRole (address to) public {
       renounceRole(MINTER_ROLE, to);
     }
+
+    
 
   
 

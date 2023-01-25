@@ -71,33 +71,8 @@ console.log("Sono in initWeb3");
       // Set the provider for our contract
       App.contracts.TutorialToken_AC.setProvider(App.web3Provider);
 
+      reloadBalance();
 
-      web3.eth.getAccounts(function(error, accounts) {
-        if (error) {
-          console.log(error);
-        }
-      
-        var account = accounts[0];
-  
-        App.contracts.TutorialToken_AC.deployed().then(function(instance) {
-          contractInstance = instance;
-        
-          // Execute adopt as a transaction by sending account
-          return contractInstance.balanceOf(account, {from: account});
-        }).then(function(result) {
-          // return App.markAdopted();
-          console.log("Il saldo è "+ result);
-          accountBalance.append(result/(10 ** 18));
-  
-        }).catch(function(err) {
-          console.log(err.message);
-        });
-  
-      });    
-
-
-  
-    
       // Use our contract to retrieve and mark the adopted pets
      //return App.markAdopted(); //?
     });
@@ -133,12 +108,16 @@ console.log("Sono in initWeb3");
 
       App.contracts.TutorialToken_AC.deployed().then(function(instance) {
         contractInstance = instance;
+
+    
       
         // Execute adopt as a transaction by sending account
-        return contractInstance.transfer(account,price * (10**18), {from: account});
+        return contractInstance.buyProduct(price, {from : account});
       }).then(function(result) {
         // return App.markAdopted();
-        console.log("Il saldo è "+ result);
+        
+        console.log("Trasferimento riuscito");
+        reloadBalance();
   
         
       }).catch(function(err) {
@@ -155,4 +134,34 @@ $(function() {
     App.init();
   });
 });
+
+function reloadBalance(){
+
+  var contractInstance;
+  var accountBalance = $('#balance');
+
+  web3.eth.getAccounts(function(error, accounts) {
+    if (error) {
+      console.log(error);
+    }
+  
+    var account = accounts[0];
+
+    App.contracts.TutorialToken_AC.deployed().then(function(instance) {
+      contractInstance = instance;
+    
+      // Execute adopt as a transaction by sending account
+      return contractInstance.balanceOf(account, {from: account});
+    }).then(function(result) {
+      // return App.markAdopted();
+      console.log("Il saldo è "+ result);
+  
+      accountBalance.text(result.toFixed(2));
+
+    }).catch(function(err) {
+      console.log(err.message);
+    });
+
+  }); 
+}
 
