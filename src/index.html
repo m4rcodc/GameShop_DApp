@@ -5,11 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/style.css">
+  
 <!---->
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>GameShop</title>
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -47,13 +49,36 @@
             <strong>Nome</strong>: <span class="product-name">God OF War</span><br/>
             <strong>Prezzo</strong>: <span class="product-price">70</span><br/>
             <strong>Console</strong>: <span class="product-console">PlayStation 5</span><br/>
-            <div class="button" style="text-align: center; padding-top: 20px;">
-            <button class="btn btn-default btn-adopt" type="button" data-prezzo="20">Acquista</button>
+            <div class="button" style="text-align: center; padding-top: 20px; display: inline-block;">
+            <button class="btn btn-default btn-adopt" type="button" data-prezzo="20" style="margin-right: 10px;">Acquista</button>
+            <button class="btn btn-default btn-modify" type="button" data-name="name" data-console="console" data-prezzo="20" data-id="1" id="Modifica" onclick="openModal()">Modifica</button>
           </div>
           </div>
         </div>
       </div>
     </div>
+
+
+    <div id="modal-form" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <!--<span class="close-modal">&times;</span> -->
+        <form class="form">
+
+          <label for="nameMd">Nome:</label>
+          <input type="text" id="nameMd" value=""> <br/> <br/>
+          <label for="prezzo">Prezzo:</label>
+          <input type="number" id="priceMd" value=""> <br/> <br/>
+          <label for="console">Console:</label>
+          <input type="text" id="consoleMd" value=""> <br/> <br/>
+          <div style="padding-top: 60px; display: inline-block; padding-left: 30px;">
+          <button class="btn btn-default btn-confirmModify" style="margin-right: 30px;"> Modifica </button>
+          <button class="btn btn-default btn-cancelModify"> Cancella </button>
+        </div>
+        </form>
+      </div>
+    </div>
+
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

@@ -18,7 +18,11 @@
   "dependencies": {
     "@openzeppelin/contracts": "^4.8.1",
     "@openzeppelin/test-helpers": "^0.5.16",
+    "axios": "^1.2.5",
+    "bootstrap": "^5.2.3",
     "chai": "^4.3.7",
+    "fs": "^0.0.1-security",
+    "node-fetch": "^3.3.0",
     "web3": "^1.8.1"
   }
 }

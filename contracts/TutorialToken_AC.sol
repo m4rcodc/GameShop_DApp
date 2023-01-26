@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 contract TutorialToken_AC is ERC20, AccessControl {
    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
    address _owner;
+   Product[] public products;
 
    constructor(
         string memory name,
@@ -16,6 +17,26 @@ contract TutorialToken_AC is ERC20, AccessControl {
       _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
       _setRoleAdmin(MINTER_ROLE, DEFAULT_ADMIN_ROLE);
    }
+
+   struct Product {
+    uint id;
+    string picture;
+    string name;
+    uint price;
+    string console;
+}
+
+   function preloadProduct() public{
+
+    products.push(Product(0, "Test picture", "name", 3, "console"));
+
+   }
+
+    function get(uint _index) public view returns (uint id, string memory picture, string memory name, uint price, string memory console) {
+        Product p = products[_index];
+        return (p.uid );
+    }
+
 
    event Debug(address user, address sender, bytes32 role, bytes32 adminRole, bytes32 senderRole);
    event ChecksoloAdmin(address user);
@@ -63,9 +84,6 @@ contract TutorialToken_AC is ERC20, AccessControl {
       renounceRole(MINTER_ROLE, to);
     }
 
-    
-
-  
 
 
 }
