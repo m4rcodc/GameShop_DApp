@@ -64,7 +64,11 @@ console.log("Sono in initWeb3");
       // Set the provider for our contract
       App.contracts.TutorialToken_AC.setProvider(App.web3Provider);
 
+      App.data = data;
+
       reloadBalance();
+
+      loadProduct();
 
       // Use our contract to retrieve and mark the adopted pets
      //return App.markAdopted(); //?
@@ -221,6 +225,74 @@ function reloadBalance(){
     });
 
   }); 
+}
+
+function loadProduct(){
+
+  var contractInstance;
+  var productRow = $('#productRow');
+  var productTemplate = $('#productTemplate');
+
+  var numProduct = retrieveArrayLenght();
+
+
+  web3.eth.getAccounts(function(error, accounts) {
+    if (error) {
+      console.log(error);
+    }
+  
+    var account = accounts[0];
+
+   // App.contracts.TutorialToken_AC = new web3.eth.Contract(App.data.abi, account);
+
+    App.contracts.TutorialToken_AC.deployed().then(function(instance) {
+      contractInstance = instance;
+    
+      // Execute adopt as a transaction by sending account
+
+      
+
+      return contractInstance.getAllProduct({from: account});
+    }).then(function(result) {
+      // return App.markAdopted();
+    //  console.log("result 0 è:  "+ result);
+     // console.log("result 0 è:  "+ result[0]);
+    
+    
+
+    }).catch(function(err) {
+      console.log(err.message);
+    });
+
+  }); 
+}
+
+function retrieveArrayLenght(){
+
+  web3.eth.getAccounts(function(error, accounts) {
+    if (error) {
+      console.log(error);
+    }
+  
+    var account = accounts[0];
+
+    App.contracts.TutorialToken_AC.deployed().then(function(instance) {
+      contractInstance = instance;
+    
+      // Execute adopt as a transaction by sending account
+      return contractInstance.getLenghtProduct({from: account});
+    }).then(function(result) {
+      // return App.markAdopted();
+      console.log("Il numero di prodotti è "+ result);
+      return result;
+
+
+    }).catch(function(err) {
+      console.log(err.message);
+    });
+
+  }); 
+
 }
 
 function openModal() {

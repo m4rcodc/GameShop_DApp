@@ -16,6 +16,7 @@ contract TutorialToken_AC is ERC20, AccessControl {
       _owner = msg.sender;
       _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
       _setRoleAdmin(MINTER_ROLE, DEFAULT_ADMIN_ROLE);
+      preloadProduct();
    }
 
    struct Product {
@@ -29,12 +30,29 @@ contract TutorialToken_AC is ERC20, AccessControl {
    function preloadProduct() public{
 
     products.push(Product(0, "Test picture", "name", 3, "console"));
+    products.push(Product(1, "Test picture1", "name1", 4, "console1"));
 
    }
 
-    function get(uint _index) public view returns (uint id, string memory picture, string memory name, uint price, string memory console) {
-        Product p = products[_index];
-        return (p.uid );
+    function getProductId(uint _index) public view returns (uint id, string memory picture, string memory name, uint price, string memory console) {
+        Product storage p = products[_index];
+        return (p.id, p.picture, p.name, p.price, p.console);
+    }
+
+     function getAllProduct() public view returns (Product[] memory) {
+
+         Product[] memory allProduct = new Product[](2);
+         allProduct[0] = products[0];
+         allProduct[1] = products[1];
+
+        return allProduct;
+    }
+
+
+
+    function getLenghtProduct() public view returns(uint num)
+    {
+      return products.length;
     }
 
 
