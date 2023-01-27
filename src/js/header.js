@@ -14,7 +14,7 @@ AppHeader = {
     AppHeader.web3Provider = window.ethereum;
     try {
       // Request account access
-      await window.ethereum.enable();
+      await window.ethereum.request({ method: "eth_requestAccounts" });;
     } catch (error) {
       // User denied account access...
       console.error("User denied account access")

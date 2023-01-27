@@ -1,12 +1,24 @@
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.17;
+
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract TutorialToken_AC is ERC20, AccessControl {
    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
    address _owner;
-   Product[] public products;
+
+   struct Product {
+    uint id;
+    string picture;
+    string name;
+    uint price;
+    string console;
+}
+
+    
+  mapping (uint256 => Product) public products;
 
    constructor(
         string memory name,
@@ -19,41 +31,38 @@ contract TutorialToken_AC is ERC20, AccessControl {
       preloadProduct();
    }
 
-   struct Product {
-    uint id;
-    string picture;
-    string name;
-    uint price;
-    string console;
-}
-
    function preloadProduct() public{
-
-    products.push(Product(0, "Test picture", "name", 3, "console"));
-    products.push(Product(1, "Test picture1", "name1", 4, "console1"));
-
+      products[0] = Product(0, "images/GodOfWar.jpg", "God Of War Ragnarok", 70, "PlayStation 5");
+      products[1] = Product(1, "images/MW2.jpg", "Call of Duty: Modern Warfare II", 75, "PlayStation 5");
+      products[2] = Product(2, "images/Horizon.jpg", "Horizon: Forbidden West", 53, "PlayStation 5");
+      products[3] = Product(3, "images/FarCry6.jpg", "Far Cry 6", 20, "Xbox Series X");
+      products[4] = Product(4, "images/CallistoProtocol.jpg", "The Callisto Protocol", 55, "Xbox Series X");
+      products[5] = Product(5, "images/Metro.jpg", "Metro Exodus", 30, "Xbox Series X");
+      products[6] = Product(6, "images/MarioBros.jpg", "New Super Mario Bros", 50, "Nintendo Switch");
+      products[7] = Product(7, "images/Pokemon.jpg",  "Pokemon Violetto ", 48, "Nintendo Switch");
+      products[8] = Product(8, "images/AnimalCrossing.jpg", "Animal Crossing: New Horizons", 58, "Nintendo Switch");
    }
 
-    function getProductId(uint _index) public view returns (uint id, string memory picture, string memory name, uint price, string memory console) {
-        Product storage p = products[_index];
-        return (p.id, p.picture, p.name, p.price, p.console);
+
+
+   function getAllProduct() public view returns (Product[] memory) {
+    
+    Product[] memory result = new Product[](9);
+    for (uint i = 0; i < 9; i++) {
+      result[i] = products[i];
     }
 
-     function getAllProduct() public view returns (Product[] memory) {
+    return result;
+}
 
-         Product[] memory allProduct = new Product[](2);
-         allProduct[0] = products[0];
-         allProduct[1] = products[1];
+   function modifyProdId(uint id, string memory name, uint price, string memory console) public soloAdmin 
+   {
 
-        return allProduct;
-    }
+      Product memory x = products[id];
+      Product memory p = Product(id, x.picture, name, price,console);
+      products[id] = p;
 
-
-
-    function getLenghtProduct() public view returns(uint num)
-    {
-      return products.length;
-    }
+   }
 
 
    event Debug(address user, address sender, bytes32 role, bytes32 adminRole, bytes32 senderRole);

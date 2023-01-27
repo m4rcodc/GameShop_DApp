@@ -2,7 +2,6 @@ AppAdmin = {
     web3Provider: null,
     contracts: {},
 
-
     init: async () => {
         return await AppAdmin.initWeb3();        
     },

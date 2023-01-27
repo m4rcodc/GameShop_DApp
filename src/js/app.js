@@ -1,40 +1,23 @@
+let id;
+
 App = {
   web3Provider: null,
   contracts: {},
 //test
-  init: async function() {
 
-    // Load pets.
-    $.getJSON('../product.json', function(data) {
-      var productRow = $('#productRow');
-      var productTemplate = $('#productTemplate');
-    
-      for (i = 0; i < data.length; i ++) {
-        productTemplate.find('img').attr('src', data[i].picture);
-        productTemplate.find('.product-name').text(data[i].name);
-        productTemplate.find('.product-price').text(data[i].prezzo + ' GST');
-        productTemplate.find('.product-console').text(data[i].console);
-        productTemplate.find('.btn-adopt').attr('data-prezzo', data[i].prezzo);
-        productTemplate.find('.btn-modify').attr('data-id', data[i].id);
-        productTemplate.find('.btn-modify').attr('data-prezzo', data[i].prezzo);
-        productTemplate.find('.btn-modify').attr('data-console', data[i].console);
-        productTemplate.find('.btn-modify').attr('data-name', data[i].name);
-        productRow.append(productTemplate.html());
+  init: async () => {
 
-      
-      }
-    });
     return await App.initWeb3();
   },
 
-  initWeb3: async function() {
+  initWeb3: async () => {
     
     // Modern dapp browsers...
 if (window.ethereum) {
   App.web3Provider = window.ethereum;
   try {
     // Request account access
-    await window.ethereum.enable();
+    await window.ethereum.request({ method: "eth_requestAccounts" });;
   } catch (error) {
     // User denied account access...
     console.error("User denied account access")
@@ -49,34 +32,80 @@ else {
   App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
 }
 web3 = new Web3(App.web3Provider);
-
-console.log("Sono in initWeb3");
-    return App.initContract();
+    return await App.initContract();
   },
 
-  initContract: function() {
+  initContract: async function() {
     
-    $.getJSON('TutorialToken_AC.json', function(data) {
+   await $.getJSON('TutorialToken_AC.json', function(data) {
       // Get the necessary contract artifact file and instantiate it with @truffle/contract
+
       var ProductArtifact = data;
       App.contracts.TutorialToken_AC = TruffleContract(ProductArtifact);
     
       // Set the provider for our contract
       App.contracts.TutorialToken_AC.setProvider(App.web3Provider);
-
-      App.data = data;
-
+    
       reloadBalance();
 
       loadProduct();
 
-      // Use our contract to retrieve and mark the adopted pets
-     //return App.markAdopted(); //?
     });
-    //return App.bindEvents();
+
     return App.verifyAdmin();
+  
   },
 
+  /*
+  loadProductInPage: async () => {
+    
+
+  let contractInstance;
+  var productRow = $('#productRow');
+  var productTemplate = $('#productTemplate');
+
+   // App.contracts.TutorialToken_AC = new web3.eth.Contract(App.data.abi, account);
+
+   await web3.eth.getAccounts(function(error, accounts) {
+        
+    if (error) {
+        console.log(error);
+    }
+
+    App.contracts.TutorialToken_AC.deployed().then(function(instance) {
+      contractInstance = instance;
+    
+      // Execute adopt as a transaction by sending account
+      var account = accounts[0];
+      
+      console.log('I am here');
+      return contractInstance.getAllProduct.call({from: account});
+    }).then(function(result) {
+      console.log(result);
+      var length = result.length;
+
+      for (var i = 0; i < length; i++) {
+        productTemplate.find('img').attr('src', result[i].picture);
+        productTemplate.find('.product-name').text(result[i].name);
+        productTemplate.find('.product-price').text(result[i].prezzo + ' GST');
+        productTemplate.find('.product-console').text(result[i].console);
+        productTemplate.find('.btn-adopt').attr('data-prezzo', result[i].prezzo);
+        productTemplate.find('.btn-modify').attr('data-id', result[i].id);
+        productTemplate.find('.btn-modify').attr('data-prezzo', result[i].prezzo);
+        productTemplate.find('.btn-modify').attr('data-console', result[i].console);
+        productTemplate.find('.btn-modify').attr('data-name', result[i].name);
+        productRow.append(productTemplate.html());
+      }
+    
+
+    }).catch(function(err) {
+      console.log(err.message);
+      console.log('Errore');
+    });
+  });
+
+  },
+*/
   verifyAdmin: async () => {
     let productInstance;
 
@@ -158,37 +187,54 @@ console.log("Sono in initWeb3");
   handleModify:  function(event) {
     event.preventDefault();
     //console.log("Sono in handleModify");
-    var id = parseInt($(event.target).data('id'));
+    id = parseInt($(event.target).data('id'));
     var priceProduct = parseInt($(event.target).data('prezzo'));
     var consoleProduct = $(event.target).data('console');
     var nameProduct = $(event.target).data('name');
     
     console.log(nameProduct + " prezzo: " + priceProduct + " Console:" + consoleProduct);
 
+    console.log("id" + id);
+
     nameMd.value = nameProduct;
     priceMd.value = priceProduct;
     consoleMd.value = consoleProduct;
-
+  
   },
 
   handleConfirmModify: function(event) {
-
 
     event.preventDefault();
 
     var nameProduct = nameMd.value;
     var priceProduct = priceMd.value;
     var consoleProduct = consoleMd.value;
-    
 
-  $.getJSON("../product.json", function(data) {
-        
-    data[0].name = 'Prova';
-    const jsonString = JSON.stringify(data);
-    jsonStrin
-    console.log(jsonString);
+    var contractInstance;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
     
-})
+      var account = accounts[0];
+
+      App.contracts.TutorialToken_AC.deployed().then(function(instance) {
+        contractInstance = instance;
+          
+
+        return contractInstance.modifyProdId(id,nameProduct,priceProduct,consoleProduct, {from: account});
+      }).then(function(result) {
+        
+        console.log("Modifica riuscita");
+        
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+
+    });
+
+
   } 
 }
 $(function() {
@@ -218,7 +264,7 @@ function reloadBalance(){
       // return App.markAdopted();
       console.log("Il saldo è "+ result);
   
-      accountBalance.text(result.toFixed(2) + ' GST');
+      accountBalance.text(result + ' GST');
 
     }).catch(function(err) {
       console.log(err.message);
@@ -227,44 +273,53 @@ function reloadBalance(){
   }); 
 }
 
-function loadProduct(){
+function  loadProduct()  {
 
-  var contractInstance;
+  let contractInstance;
   var productRow = $('#productRow');
   var productTemplate = $('#productTemplate');
 
-  var numProduct = retrieveArrayLenght();
-
-
-  web3.eth.getAccounts(function(error, accounts) {
-    if (error) {
-      console.log(error);
-    }
-  
-    var account = accounts[0];
-
    // App.contracts.TutorialToken_AC = new web3.eth.Contract(App.data.abi, account);
+
+    web3.eth.getAccounts(function(error, accounts) {
+        
+    if (error) {
+        console.log(error);
+    }
 
     App.contracts.TutorialToken_AC.deployed().then(function(instance) {
       contractInstance = instance;
     
       // Execute adopt as a transaction by sending account
-
+      var account = accounts[0];
       
-
-      return contractInstance.getAllProduct({from: account});
+      console.log('I am here');
+      return contractInstance.getAllProduct.call({from: account});
     }).then(function(result) {
-      // return App.markAdopted();
-    //  console.log("result 0 è:  "+ result);
-     // console.log("result 0 è:  "+ result[0]);
-    
+      console.log(result);
+      var length = result.length;
+
+
+      for (var i = 0; i < length; i++) {
+        productTemplate.find('img').attr('src', result[i].picture);
+        productTemplate.find('.product-name').text(result[i].name);
+        productTemplate.find('.product-price').text(result[i].price + ' GST');
+        productTemplate.find('.product-console').text(result[i].console);
+        productTemplate.find('.btn-adopt').attr('data-prezzo', result[i].price);
+        productTemplate.find('.btn-modify').attr('data-id', result[i].id);
+        productTemplate.find('.btn-modify').attr('data-prezzo', result[i].price);
+        productTemplate.find('.btn-modify').attr('data-console', result[i].console);
+        productTemplate.find('.btn-modify').attr('data-name', result[i].name);
+        productRow.append(productTemplate.html());
+      }
     
 
     }).catch(function(err) {
       console.log(err.message);
+      console.log('Errore');
     });
-
-  }); 
+  });
+ 
 }
 
 function retrieveArrayLenght(){
@@ -280,7 +335,7 @@ function retrieveArrayLenght(){
       contractInstance = instance;
     
       // Execute adopt as a transaction by sending account
-      return contractInstance.getLenghtProduct({from: account});
+      return contractInstance.getLenghtProduct({from: account}).call();
     }).then(function(result) {
       // return App.markAdopted();
       console.log("Il numero di prodotti è "+ result);
