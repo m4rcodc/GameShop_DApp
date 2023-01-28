@@ -8,6 +8,7 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 contract TutorialToken_AC is ERC20, AccessControl {
    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
    address _owner;
+   uint _counterProd;
 
    struct Product {
     uint id;
@@ -26,6 +27,7 @@ contract TutorialToken_AC is ERC20, AccessControl {
         uint256 initialSupply) ERC20(name, symbol) {
       _mint(msg.sender, initialSupply);
       _owner = msg.sender;
+      _counterProd = 0;
       _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
       _setRoleAdmin(MINTER_ROLE, DEFAULT_ADMIN_ROLE);
       preloadProduct();
@@ -41,14 +43,15 @@ contract TutorialToken_AC is ERC20, AccessControl {
       products[6] = Product(6, "images/MarioBros.jpg", "New Super Mario Bros", 50, "Nintendo Switch");
       products[7] = Product(7, "images/Pokemon.jpg",  "Pokemon Violetto ", 48, "Nintendo Switch");
       products[8] = Product(8, "images/AnimalCrossing.jpg", "Animal Crossing: New Horizons", 58, "Nintendo Switch");
+      _counterProd = 9;
    }
 
 
 
    function getAllProduct() public view returns (Product[] memory) {
     
-    Product[] memory result = new Product[](9);
-    for (uint i = 0; i < 9; i++) {
+    Product[] memory result = new Product[](_counterProd);
+    for (uint i = 0; i < _counterProd; i++) {
       result[i] = products[i];
     }
 
@@ -61,6 +64,14 @@ contract TutorialToken_AC is ERC20, AccessControl {
       Product memory x = products[id];
       Product memory p = Product(id, x.picture, name, price,console);
       products[id] = p;
+
+   }
+
+   function addProduct(string memory name,string memory picture, uint price, string memory console) public soloAdmin
+   {
+      Product memory p = Product(_counterProd, picture, name, price,console);
+      products[_counterProd] = p;
+      _counterProd++;
 
    }
 

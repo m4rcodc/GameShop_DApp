@@ -55,6 +55,7 @@ AppAdmin = {
     bindEvents: function() {
         console.log("Sono in bindEvents in adminjs");
         $(document).on('click', '.btn-admin', AppAdmin.handleTransferToken);
+        $(document).on('click', '.btn-addProd', AppAdmin.handleAddProduct);
       }, 
 
 
@@ -93,7 +94,44 @@ AppAdmin = {
             console.log(err.message);
           });
     });
+},
+
+handleAddProduct: function(event) {
+
+  event.preventDefault();
+  console.log("Sono in handle addProduct");
+
+  var nameProd = prodNameInput.value;
+  var pictureProd = prodPictureInput.value;
+  var priceProd = prodPriceInput.value;
+  var consoleProd = prodConsoleInput.value;
+
+
+  web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+    
+      var account = accounts[0];
+      
+
+  AppAdmin.contracts.TutorialToken_AC.deployed().then(function(instance) {
+      contractInstance = instance;
+    
+      // Execute adopt as a transaction by sending account
+      return contractInstance.addProduct(nameProd, pictureProd, priceProd, consoleProd, {from: account});
+    }).then(function(result) {
+      // return App.markAdopted();
+      alert("Prodotto aggiunto!");
+  
+
+    }).catch(function(err) {
+      alert("Prodotto non aggiunto!");
+      console.log(err.message);
+    });
+});
 }
+
 }
 
 $(function() {
