@@ -35,13 +35,13 @@ AppAdmin = {
   
     initContract: async function() {
       
-    await $.getJSON('TutorialToken_AC.json', function(data) {
+    await $.getJSON('GST_Token.json', function(data) {
         // Get the necessary contract artifact file and instantiate it with @truffle/contract
         var ProductArtifact = data;
-        AppAdmin.contracts.TutorialToken_AC = TruffleContract(ProductArtifact);
+        AppAdmin.contracts.GST_Token = TruffleContract(ProductArtifact);
       
         // Set the provider for our contract
-        AppAdmin.contracts.TutorialToken_AC.setProvider(AppAdmin.web3Provider);
+        AppAdmin.contracts.GST_Token.setProvider(AppAdmin.web3Provider);
 
         reloadBalance();
 
@@ -80,7 +80,7 @@ AppAdmin = {
             var account = accounts[0];
             
 
-        AppAdmin.contracts.TutorialToken_AC.deployed().then(function(instance) {
+        AppAdmin.contracts.GST_Token.deployed().then(function(instance) {
             contractInstance = instance;
           
             // Execute adopt as a transaction by sending account
@@ -97,6 +97,7 @@ AppAdmin = {
     });
 
         }
+
 },
 
 handleAddProduct: function(event) {
@@ -123,7 +124,7 @@ handleAddProduct: function(event) {
       var account = accounts[0];
       
 
-  AppAdmin.contracts.TutorialToken_AC.deployed().then(function(instance) {
+  AppAdmin.contracts.GST_Token.deployed().then(function(instance) {
       contractInstance = instance;
     
       // Execute adopt as a transaction by sending account
@@ -163,7 +164,7 @@ function reloadBalance(){
     
       var account = accounts[0];
   
-      AppAdmin.contracts.TutorialToken_AC.deployed().then(function(instance) {
+      AppAdmin.contracts.GST_Token.deployed().then(function(instance) {
         contractInstance = instance;
       
         // Execute adopt as a transaction by sending account
@@ -171,7 +172,7 @@ function reloadBalance(){
       }).then(function(result) {
         // return App.markAdopted();
 
-        accountBalance.text(result.toFixed(2));
+        accountBalance.text(result + " GST");
   
       }).catch(function(err) {
         console.log(err.message);

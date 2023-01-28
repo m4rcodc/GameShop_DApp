@@ -7,24 +7,26 @@ const { expect } = require('chai');
 // Import accounts
 
 var Web3 = require('web3');
-var web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
+var web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:7545'));
 
 // Import utilities from Test Helpers
 const { BN, expectEvent, expectRevert, constants } = require('@openzeppelin/test-helpers');
 
 // Load compiled artifacts
-const SimpleTokenAC = artifacts.require('TutorialToken_AC');
+const SimpleTokenAC = artifacts.require('GST_Token');
 
 const ROLE = web3.utils.sha3('MINTER_ROLE');
 // Start test block
-contract('SimpleToken_AC', function ([ creator, minter, other ]) {
-  const NAME = 'SimpleToken_AC';
-  const SYMBOL = 'SIM_AC';
-  const TOTAL_SUPPLY = new BN('10000000000000000000000');
+contract('GST_Token', function ([ creator, minter, other ]) {
+  const NAME = 'GameShopToken';
+  const SYMBOL = 'GST';
+  const TOTAL_SUPPLY = new BN('1000000');
 
   beforeEach(async function () {
     this.token = await SimpleTokenAC.new(NAME, SYMBOL, TOTAL_SUPPLY, { from: creator });
   });
+
+/*
 
   it('retrieve returns a value previously stored', async function () {
     // Use large integer comparisons
@@ -87,4 +89,63 @@ contract('SimpleToken_AC', function ([ creator, minter, other ]) {
     
     expect(await this.token.isMinter(minter)).to.equal(false);
   });
+
+  */
+
+  it('check buyProduct from other with sufficient balance', async function () {
+
+    //Trasferiamo 100 GST dall'owner all'account other
+    const receipt1 = await this.token.transfer(other, new BN('100'), { from: creator });
+    expectEvent(receipt1, 'Transfer');
+
+    //Controlliamo se il balance di GST dell'account other è di 100
+    expect(await this.token.balanceOf(other)).to.be.bignumber.equal(new BN('100'));
+
+    //L'account "other" acquista un gioco che paga 100
+    const receipt2 = await this.token.transfer(creator, new BN('100'), { from: other });
+    expectEvent(receipt2, 'Transfer');
+
+    //L'account "other" dovrebbe avere saldo di GST = 0
+    expect(await this.token.balanceOf(other)).to.be.bignumber.equal(new BN('0'));
+  
+  });
+
+  it('check buyProduct from other with not sufficient balance', async function () {
+
+    //Trasferiamo 20 GST dall'owner all'account other
+    const receipt1 = await this.token.transfer(other, new BN('20'), { from: creator });
+    expectEvent(receipt1, 'Transfer');
+
+    //Controlliamo se il balance di GST dell'account other è di 20
+    expect(await this.token.balanceOf(other)).to.be.bignumber.equal(new BN('20'));
+
+    //L'account "other" acquista un gioco che paga 50
+    await expectRevert(this.token.transfer(creator, new BN('50'), { from: other }), 'transfer amount exceeds balance');
+
+    //L'account "other" dovrebbe avere saldo di GST = 20
+    expect(await this.token.balanceOf(other)).to.be.bignumber.equal(new BN('20'));
+  
+  });
+
+  it('Add Product in the blockchain', async function () {
+
+    //Trasferiamo 20 GST dall'owner all'account other
+    const receipt1 = await this.token.transfer(other, new BN('20'), { from: creator });
+    expectEvent(receipt1, 'Transfer');
+
+    //Controlliamo se il balance di GST dell'account other è di 20
+    expect(await this.token.balanceOf(other)).to.be.bignumber.equal(new BN('20'));
+
+    //L'account "other" acquista un gioco che paga 50
+    await expectRevert(this.token.transfer(creator, new BN('50'), { from: other }), 'transfer amount exceeds balance');
+
+    //L'account "other" dovrebbe avere saldo di GST = 20
+    expect(await this.token.balanceOf(other)).to.be.bignumber.equal(new BN('20'));
+  
+  });
+
+
+
+  
+
 });

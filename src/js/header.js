@@ -36,13 +36,13 @@ AppHeader = {
   
     initContract: async function() {
       
-    await $.getJSON('TutorialToken_AC.json', function(data) {
+    await $.getJSON('GST_Token.json', function(data) {
         // Get the necessary contract artifact file and instantiate it with @truffle/contract
         var ProductArtifact = data;
-        AppHeader.contracts.TutorialToken_AC = TruffleContract(ProductArtifact);
+        AppHeader.contracts.GST_Token = TruffleContract(ProductArtifact);
       
         // Set the provider for our contract
-        AppHeader.contracts.TutorialToken_AC.setProvider(AppHeader.web3Provider);
+        AppHeader.contracts.GST_Token.setProvider(AppHeader.web3Provider);
 
       });
       
@@ -61,7 +61,7 @@ AppHeader = {
             
             console.log('Sono qui before function');
             const account = accounts[0];
-            AppHeader.contracts.TutorialToken_AC.deployed().then(function(instance) {
+            AppHeader.contracts.GST_Token.deployed().then(function(instance) {
                 productInstance = instance;
 
                 return productInstance.isAdmin(account);

@@ -1,6 +1,6 @@
-var TutorialToken_AC = artifacts.require("TutorialToken_AC");
+var GST_Token = artifacts.require("GST_Token");
 
 module.exports = function(deployer) {
-  deployer.deploy(TutorialToken_AC, 'GameShopToken', 'GST', '1000000');
+  deployer.deploy(GST_Token, 'GameShopToken', 'GST', '1000000');
 
 };

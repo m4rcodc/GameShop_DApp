@@ -5,9 +5,9 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract TutorialToken_AC is ERC20, AccessControl {
+contract GST_Token is ERC20, AccessControl {
    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
-   address _owner;
+   address private _owner;
    uint _counterProd;
 
    struct Product {
@@ -92,9 +92,14 @@ contract TutorialToken_AC is ERC20, AccessControl {
       _;
    }
 
-   function buyProduct(uint256 amount) public virtual returns(bool) {
-      return transfer(_owner, amount);
+   function buyProduct(uint256 amount) public virtual returns(bool)
+   {
+      return transfer( _owner, amount);
+   }
 
+   function getOwner() public virtual view returns(address)
+   {
+      return _owner;
    }
 
    function isAdmin(address account) public virtual view returns (bool) {
@@ -105,9 +110,7 @@ contract TutorialToken_AC is ERC20, AccessControl {
       return hasRole(MINTER_ROLE, account);
    }
 
-   function showOwner() public virtual view returns(address){
-      return _owner;
-   }
+
 
    function mint(address to, uint256 amount) public soloMinters {
       _mint(to, amount);

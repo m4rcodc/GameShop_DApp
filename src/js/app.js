@@ -1,4 +1,5 @@
 let id;
+var owner;
 
 App = {
   web3Provider: null,
@@ -37,18 +38,20 @@ web3 = new Web3(App.web3Provider);
 
   initContract: async function() {
     
-   await $.getJSON('TutorialToken_AC.json', function(data) {
+   await $.getJSON('GST_Token.json', function(data) {
       // Get the necessary contract artifact file and instantiate it with @truffle/contract
 
       var ProductArtifact = data;
-      App.contracts.TutorialToken_AC = TruffleContract(ProductArtifact);
+      App.contracts.GST_Token = TruffleContract(ProductArtifact);
     
       // Set the provider for our contract
-      App.contracts.TutorialToken_AC.setProvider(App.web3Provider);
+      App.contracts.GST_Token.setProvider(App.web3Provider);
     
       reloadBalance();
 
       loadProduct();
+
+      getOwnerContract();
 
     });
 
@@ -56,56 +59,6 @@ web3 = new Web3(App.web3Provider);
   
   },
 
-  /*
-  loadProductInPage: async () => {
-    
-
-  let contractInstance;
-  var productRow = $('#productRow');
-  var productTemplate = $('#productTemplate');
-
-   // App.contracts.TutorialToken_AC = new web3.eth.Contract(App.data.abi, account);
-
-   await web3.eth.getAccounts(function(error, accounts) {
-        
-    if (error) {
-        console.log(error);
-    }
-
-    App.contracts.TutorialToken_AC.deployed().then(function(instance) {
-      contractInstance = instance;
-    
-      // Execute adopt as a transaction by sending account
-      var account = accounts[0];
-      
-      console.log('I am here');
-      return contractInstance.getAllProduct.call({from: account});
-    }).then(function(result) {
-      console.log(result);
-      var length = result.length;
-
-      for (var i = 0; i < length; i++) {
-        productTemplate.find('img').attr('src', result[i].picture);
-        productTemplate.find('.product-name').text(result[i].name);
-        productTemplate.find('.product-price').text(result[i].prezzo + ' GST');
-        productTemplate.find('.product-console').text(result[i].console);
-        productTemplate.find('.btn-adopt').attr('data-prezzo', result[i].prezzo);
-        productTemplate.find('.btn-modify').attr('data-id', result[i].id);
-        productTemplate.find('.btn-modify').attr('data-prezzo', result[i].prezzo);
-        productTemplate.find('.btn-modify').attr('data-console', result[i].console);
-        productTemplate.find('.btn-modify').attr('data-name', result[i].name);
-        productRow.append(productTemplate.html());
-      }
-    
-
-    }).catch(function(err) {
-      console.log(err.message);
-      console.log('Errore');
-    });
-  });
-
-  },
-*/
   verifyAdmin: async () => {
     let productInstance;
 
@@ -117,7 +70,7 @@ web3 = new Web3(App.web3Provider);
         
         console.log('Sono qui in verifyAdmin');
         const account = accounts[0];
-        AppHeader.contracts.TutorialToken_AC.deployed().then(function(instance) {
+        AppHeader.contracts.GST_Token.deployed().then(function(instance) {
             productInstance = instance;
 
             return productInstance.isAdmin(account);
@@ -144,13 +97,13 @@ web3 = new Web3(App.web3Provider);
 
   bindEvents: function() {
     console.log("Sono in bindEvents");
-    $(document).on('click', '.btn-adopt', App.handleAdopt);
+    $(document).on('click', '.btn-buyProd', App.handleBuyProduct);
     $(document).on('click', '.btn-modify', App.handleModify);
     $(document).on('click', '.btn-confirmModify', App.handleConfirmModify);
    
   },
 
-  handleAdopt:  function(event) {
+  handleBuyProduct:  function(event) {
     event.preventDefault();
     console.log("Sono in handleAdopt");
    // var petId = parseInt($(event.target).data('id'));
@@ -159,6 +112,10 @@ web3 = new Web3(App.web3Provider);
 
     var contractInstance;
 
+    
+
+    
+
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
         console.log(error);
@@ -166,18 +123,20 @@ web3 = new Web3(App.web3Provider);
     
       var account = accounts[0];
 
-      App.contracts.TutorialToken_AC.deployed().then(function(instance) {
+      App.contracts.GST_Token.deployed().then(function(instance) {
         contractInstance = instance;
-          
+
+
         // Execute adopt as a transaction by sending account
-        return contractInstance.buyProduct(price, {from : account});
+        return contractInstance.transfer(owner, price, {from : account});
       }).then(function(result) {
         // return App.markAdopted();
         
-        console.log("Trasferimento riuscito");
+        alert("Acquisto riuscito");
         reloadBalance();
         
       }).catch(function(err) {
+        alert("Acquisto non riuscito");
         console.log(err.message);
       });
 
@@ -219,7 +178,7 @@ web3 = new Web3(App.web3Provider);
     
       var account = accounts[0];
 
-      App.contracts.TutorialToken_AC.deployed().then(function(instance) {
+      App.contracts.GST_Token.deployed().then(function(instance) {
         contractInstance = instance;
           
 
@@ -255,7 +214,7 @@ function reloadBalance(){
   
     var account = accounts[0];
 
-    App.contracts.TutorialToken_AC.deployed().then(function(instance) {
+    App.contracts.GST_Token.deployed().then(function(instance) {
       contractInstance = instance;
     
       // Execute adopt as a transaction by sending account
@@ -273,13 +232,14 @@ function reloadBalance(){
   }); 
 }
 
+
+
 function  loadProduct()  {
 
   let contractInstance;
   var productRow = $('#productRow');
   var productTemplate = $('#productTemplate');
 
-   // App.contracts.TutorialToken_AC = new web3.eth.Contract(App.data.abi, account);
 
     web3.eth.getAccounts(function(error, accounts) {
         
@@ -287,7 +247,7 @@ function  loadProduct()  {
         console.log(error);
     }
 
-    App.contracts.TutorialToken_AC.deployed().then(function(instance) {
+    App.contracts.GST_Token.deployed().then(function(instance) {
       contractInstance = instance;
     
       // Execute adopt as a transaction by sending account
@@ -305,7 +265,7 @@ function  loadProduct()  {
         productTemplate.find('.product-name').text(result[i].name);
         productTemplate.find('.product-price').text(result[i].price + ' GST');
         productTemplate.find('.product-console').text(result[i].console);
-        productTemplate.find('.btn-adopt').attr('data-prezzo', result[i].price);
+        productTemplate.find('.btn-buyProd').attr('data-prezzo', result[i].price);
         productTemplate.find('.btn-modify').attr('data-id', result[i].id);
         productTemplate.find('.btn-modify').attr('data-prezzo', result[i].price);
         productTemplate.find('.btn-modify').attr('data-console', result[i].console);
@@ -322,8 +282,10 @@ function  loadProduct()  {
  
 }
 
-function retrieveArrayLenght(){
+function getOwnerContract(){
 
+
+  
   web3.eth.getAccounts(function(error, accounts) {
     if (error) {
       console.log(error);
@@ -331,14 +293,14 @@ function retrieveArrayLenght(){
   
     var account = accounts[0];
 
-    App.contracts.TutorialToken_AC.deployed().then(function(instance) {
+    App.contracts.GST_Token.deployed().then(function(instance) {
       contractInstance = instance;
     
       // Execute adopt as a transaction by sending account
-      return contractInstance.getLenghtProduct({from: account}).call();
+      return contractInstance.getOwner.call({from:account});
     }).then(function(result) {
       // return App.markAdopted();
-      console.log("Il numero di prodotti è "+ result);
+      owner = result;
       return result;
 
 
@@ -349,6 +311,9 @@ function retrieveArrayLenght(){
   }); 
 
 }
+
+
+
 
 function openModal() {
   console.log("Sono in openModal");
