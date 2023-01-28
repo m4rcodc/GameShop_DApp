@@ -13,59 +13,58 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
   <title>Gestione</title>
   <style>
-    /* Styling for the forms and button */
     form {
-      width: 50%;
-      margin: 60px auto;
-      text-align: center;
-    }
+    width: 50%;
+    margin: 60px auto;
+    text-align: center;
+  }
 
-    input[type="text"] {
-      padding: 12px 20px;
-      margin: 8px 0;
-      box-sizing: border-box;
-      width: 100%;
-    }
+  input[type="text"] {
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    width: 100%;
+  }
 
-    input[type="number"] {
-      padding: 12px 20px;
-      margin: 8px 0;
-      box-sizing: border-box;
-      width: 100%;
-    }
+  input[type="number"] {
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    width: 100%;
+  }
 
-    button {
-      background-color: #4CAF50;
-      color: white;
-      padding: 14px 20px;
-      margin: 8px 0;
-      border: none;
-      cursor: pointer;
-    }
+  button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+  }
 
-    .lCenter{
-      display: block;
-      text-align: center;
-      line-height: 150%;
-      font-size: .85em;
-    }
+  .lCenter{
+    display: block;
+    text-align: center;
+    line-height: 150%;
+    font-size: .85em;
+  }
 
-    /* Center the button */
-    .center {
-      display: flex;
-      justify-content: center;
-    }
-    
+  /* Center the button */
+  .center {
+    display: flex;
+    justify-content: center;
+  }
   </style>
 </head>
 <body style="background-color: #b3d9ff;">
   <nav>
-    <label class = "logo"> GameShop
-    </label>
+  <label class = "logo">
+    <img src="images/Logo.png" alt="logo" style="width: 380px; height: 110px; margin-left: 120px;  filter: whitescale(100%);">
+  </label>
    <ul>
     <li>
-      <a class="active" href="index.html">Home</a>
-      <a href="gestione.html" id="gestione" class="create_hiding">Gestione</a>
+      <a href="index.html">Home</a>
+      <a class="active" href="gestione.html" id="gestione" class="create_hiding">Gestione</a>
       <a class="inactiveLink">Saldo:</a>
       <a id="balance" class="inactiveLink" value=""> </a>
     </li>

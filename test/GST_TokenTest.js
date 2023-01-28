@@ -2,7 +2,7 @@
 
 // Based on https://github.com/OpenZeppelin/openzeppelin-solidity/blob/v2.5.1/test/examples/SimpleToken.test.js
 
-const { expect } = require('chai');
+const { expect, assert } = require('chai');
 
 // Import accounts
 
@@ -102,7 +102,7 @@ contract('GST_Token', function ([ creator, minter, other ]) {
     expect(await this.token.balanceOf(other)).to.be.bignumber.equal(new BN('100'));
 
     //L'account "other" acquista un gioco che paga 100
-    const receipt2 = await this.token.transfer(creator, new BN('100'), { from: other });
+    const receipt2 = await this.token.buyProduct(new BN('100'), { from: other });
     expectEvent(receipt2, 'Transfer');
 
     //L'account "other" dovrebbe avere saldo di GST = 0
@@ -120,29 +120,82 @@ contract('GST_Token', function ([ creator, minter, other ]) {
     expect(await this.token.balanceOf(other)).to.be.bignumber.equal(new BN('20'));
 
     //L'account "other" acquista un gioco che paga 50
-    await expectRevert(this.token.transfer(creator, new BN('50'), { from: other }), 'transfer amount exceeds balance');
+    await expectRevert(this.token.buyProduct(new BN('50'), { from: other }), 'transfer amount exceeds balance');
 
     //L'account "other" dovrebbe avere saldo di GST = 20
     expect(await this.token.balanceOf(other)).to.be.bignumber.equal(new BN('20'));
   
   });
 
-  it('Add Product in the blockchain', async function () {
+  
+  it('Add Product in the blockchain from creator', async function () {
 
-    //Trasferiamo 20 GST dall'owner all'account other
-    const receipt1 = await this.token.transfer(other, new BN('20'), { from: creator });
-    expectEvent(receipt1, 'Transfer');
+    var result = await this.token.getAllProduct({ from: creator });
 
-    //Controlliamo se il balance di GST dell'account other è di 20
-    expect(await this.token.balanceOf(other)).to.be.bignumber.equal(new BN('20'));
+    for(var i=0 ; i< result.length ; i++)
+    {
+
+      //Controlliamo se esiste già un prodotto chiamato Crash Bandicoot 4
+      assert(result[i].name != 'Crash Bandicoot 4');
+
+    }
+
+    const receipt = await this.token.addProduct("Crash Bandicoot 4", "https://m.media-amazon.com/images/I/61DCrgHKM3L._AC_SX385_.jpg", 50, "PlayStation 4", { from: creator });
+    expectEvent(receipt, 'CheckAddProduct');
+
+    var result2 = await this.token.getAllProduct({ from: creator });
+
+    var count;
+
+    for(var i=0 ; i< result2.length ; i++)
+    {
+
+      if(result2[i].name == 'Crash Bandicoot 4')
+      {
+        count = i;
+      }
+      
+    }
+
+    assert(result2[count].name == 'Crash Bandicoot 4');
+
+  
+  });
+
+  
+
+  it('Add Product in the blockchain from other', async function () {
 
     //L'account "other" acquista un gioco che paga 50
-    await expectRevert(this.token.transfer(creator, new BN('50'), { from: other }), 'transfer amount exceeds balance');
+    await expectRevert(this.token.addProduct("Crash Bandicoot 4", "https://m.media-amazon.com/images/I/61DCrgHKM3L._AC_SX385_.jpg", new BN('50'), "PlayStation 4", { from: other }), 'Restricted to admins');
+    
+  });
+  
+  it('Modify product from admin', async function () {
 
-    //L'account "other" dovrebbe avere saldo di GST = 20
-    expect(await this.token.balanceOf(other)).to.be.bignumber.equal(new BN('20'));
+    var result = await this.token.getAllProduct({ from: creator });
+
+    assert(result[0].name == "God Of War Ragnarok" && result[0].price == 70 && result[0].console == 'PlayStation 5');
+
+    const receipt1 = await this.token.modifyProdId(0, 'Crash Bandicoot', 50, 'Xbox Series X', { from: creator });
+
+    expectEvent(receipt1, 'CheckModify');
+
+
+    var result1 = await this.token.getAllProduct({ from: creator });
+
+    assert(result1[0].name == "Crash Bandicoot" && result1[0].price == 50 && result1[0].console == 'Xbox Series X');
   
   });
+
+  it('Modify product from other', async function () {
+
+    //L'account "other" acquista un gioco che paga 50
+    await expectRevert(this.token.modifyProdId(0, 'Crash Bandicoot', 50, 'Xbox Series X', { from: other }), 'Restricted to admins');
+
+  });
+
+
 
 
 

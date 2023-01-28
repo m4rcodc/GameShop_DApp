@@ -65,6 +65,9 @@ contract GST_Token is ERC20, AccessControl {
       Product memory p = Product(id, x.picture, name, price,console);
       products[id] = p;
 
+      emit CheckModify(msg.sender);
+
+
    }
 
    function addProduct(string memory name,string memory picture, uint price, string memory console) public soloAdmin
@@ -73,12 +76,16 @@ contract GST_Token is ERC20, AccessControl {
       products[_counterProd] = p;
       _counterProd++;
 
+      emit CheckAddProduct(msg.sender);
+
    }
 
 
    event Debug(address user, address sender, bytes32 role, bytes32 adminRole, bytes32 senderRole);
    event ChecksoloAdmin(address user);
    event ChecksoloMinters(address user);
+   event CheckModify(address user);
+   event CheckAddProduct(address user);
 
    modifier soloAdmin() {
       emit ChecksoloAdmin(msg.sender);

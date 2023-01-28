@@ -10,20 +10,14 @@ body{
 }
 nav {
     background: #66b3ff;
-    height: 80px;
+    height: 100px;
     width: 100%;
     padding-bottom: 20px;
-}
-label.logo{
-    color: white;
-    font-size: 35px;
-    line-height: 80px;
-    padding: 0 100px;
-    font-weight: bold;
 }
 nav ul{
     float: right;
     margin-right: 20px;
+    margin-top: 15px;
 }
 nav ul li{
     display: inline-block;
@@ -92,4 +86,4 @@ a.active, a:hover{
   .show {
     display: block;
   }
- /* Modal container */
+  

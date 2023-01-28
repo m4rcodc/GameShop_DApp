@@ -99,8 +99,7 @@ web3 = new Web3(App.web3Provider);
     console.log("Sono in bindEvents");
     $(document).on('click', '.btn-buyProd', App.handleBuyProduct);
     $(document).on('click', '.btn-modify', App.handleModify);
-    $(document).on('click', '.btn-confirmModify', App.handleConfirmModify);
-   
+    $(document).on('click', '.btn-confirmModify', App.handleConfirmModify); 
   },
 
   handleBuyProduct:  function(event) {
@@ -111,10 +110,6 @@ web3 = new Web3(App.web3Provider);
     console.log("Il prezzo selezionato è: " + price);
 
     var contractInstance;
-
-    
-
-    
 
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
@@ -192,9 +187,7 @@ web3 = new Web3(App.web3Provider);
       });
 
     });
-
-
-  } 
+  },
 }
 $(function() {
   $(window).load(function() {
@@ -312,21 +305,15 @@ function getOwnerContract(){
 
 }
 
-
-
-
 function openModal() {
   console.log("Sono in openModal");
   document.getElementById("modal-form").classList.add("show");
 }
 
 function closeModal() {
-  document.getElementById("modal-form").classList.remove("show");
+  document.getElementById("modal-form").hide();
 }
 
-function updateProduct() {
-
-}
 
 
 
