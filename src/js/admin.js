@@ -70,8 +70,9 @@ AppAdmin = {
         if(valueAddress == "") {
             alert('Inserisci l\'indirizzo');
         }
+        else{
 
-        web3.eth.getAccounts(function(error, accounts) {
+          web3.eth.getAccounts(function(error, accounts) {
             if (error) {
               console.log(error);
             }
@@ -94,6 +95,8 @@ AppAdmin = {
             console.log(err.message);
           });
     });
+
+        }
 },
 
 handleAddProduct: function(event) {
@@ -106,8 +109,13 @@ handleAddProduct: function(event) {
   var priceProd = prodPriceInput.value;
   var consoleProd = prodConsoleInput.value;
 
+  if(nameProd == '' || pictureProd == '' || priceProd == '' || consoleProd == '')
+  {
+    alert("Inserisci tutti i campi!");
+  }
+  else{
 
-  web3.eth.getAccounts(function(error, accounts) {
+    web3.eth.getAccounts(function(error, accounts) {
       if (error) {
         console.log(error);
       }
@@ -130,6 +138,9 @@ handleAddProduct: function(event) {
       console.log(err.message);
     });
 });
+
+  }
+
 }
 
 }

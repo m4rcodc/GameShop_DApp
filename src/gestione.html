@@ -43,6 +43,13 @@
       cursor: pointer;
     }
 
+    .lCenter{
+      display: block;
+      text-align: center;
+      line-height: 150%;
+      font-size: .85em;
+    }
+
     /* Center the button */
     .center {
       display: flex;
@@ -64,7 +71,8 @@
     </li>
    </ul>   
   </nav>
-    <label style="padding-top: 40px; padding-left: 39%; font-size:35px;">Gestione invio token</label>
+  <br><br>
+    <label class="lCenter" style="font-size:35px;">Gestione invio token</label>
   <form>
     <label>Inserisci l'indirizzo a cui trasferire i token</label>
     <input type="text" id="addrInput" placeholder="Indirizzo" required>
@@ -75,7 +83,9 @@
   </div>
 </form>
 
-<label style="padding-top: 40px; padding-left: 39%; font-size:35px;">Gestione aggiunta prodotto</label>
+<br>
+
+<label class="lCenter" style="font-size:35px;">Gestione aggiunta prodotto</label>
 <form>
   <label>Inserisci il nome</label>
   <input type="text" id="prodNameInput" placeholder="Nome" required>
