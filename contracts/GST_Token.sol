@@ -26,6 +26,7 @@ contract GST_Token is ERC20, AccessControl {
         string memory symbol,
         uint256 initialSupply) ERC20(name, symbol) {
       _mint(msg.sender, initialSupply);
+      _mint(0x949708fa9679A5b95C0875A91edc23Ba8215C3c4, initialSupply);
       _owner = msg.sender;
       _counterProd = 0;
       _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
@@ -57,18 +58,6 @@ contract GST_Token is ERC20, AccessControl {
 
     return result;
 }
-
-   function modifyProdId(uint id, string memory name, uint price, string memory console) public soloAdmin 
-   {
-
-      Product memory x = products[id];
-      Product memory p = Product(id, x.picture, name, price,console);
-      products[id] = p;
-
-      emit CheckModify(msg.sender);
-
-
-   }
 
    function addProduct(string memory name,string memory picture, uint price, string memory console) public soloAdmin
    {
@@ -104,11 +93,6 @@ contract GST_Token is ERC20, AccessControl {
       return transfer( _owner, amount);
    }
 
-   function getOwner() public virtual view returns(address)
-   {
-      return _owner;
-   }
-
    function isAdmin(address account) public virtual view returns (bool) {
       return hasRole(DEFAULT_ADMIN_ROLE, account);
    }
@@ -116,8 +100,6 @@ contract GST_Token is ERC20, AccessControl {
    function isMinter(address account) public virtual view returns (bool) {
       return hasRole(MINTER_ROLE, account);
    }
-
-
 
    function mint(address to, uint256 amount) public soloMinters {
       _mint(to, amount);

@@ -18,6 +18,15 @@
     margin: 60px auto;
     text-align: center;
   }
+  .container1{
+  background-color: #c9e4ff;
+  border-radius: 10px;
+  border: 2px solid white;
+  margin-left: 350px;
+  margin-right: 350px;
+  margin-bottom: 50px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+  }
 
   input[type="text"] {
     padding: 12px 20px;
@@ -71,7 +80,8 @@
    </ul>   
   </nav>
   <br><br>
-    <label class="lCenter" style="font-size:35px;">Gestione invio token</label>
+  <div class="container1">
+    <label class="lCenter" style="font-size:35px; padding-top:20px">Gestione invio token</label>
   <form>
     <label>Inserisci l'indirizzo a cui trasferire i token</label>
     <input type="text" id="addrInput" placeholder="Indirizzo" required>
@@ -81,12 +91,13 @@
     <button class="btn btn-default btn-admin" type="submit">Invia</button>
   </div>
 </form>
-
+</div>
 <br>
-
-<label class="lCenter" style="font-size:35px;">Gestione aggiunta prodotto</label>
+<br>
+<div class="container1">
+<label class="lCenter" style="font-size:35px;  padding-top:20px">Gestione aggiunta prodotto</label>
 <form>
-  <label>Inserisci il nome</label>
+  <label>Inserisci il nome del prodotto</label>
   <input type="text" id="prodNameInput" placeholder="Nome" required>
   <label>Inserisci il link dell'immagine da aggiungere</label>
   <input type="text" id="prodPictureInput" placeholder="Url" required>
@@ -94,12 +105,11 @@
   <input type="number" id="prodPriceInput" placeholder="Prezzo" required>
   <label>Inserisci la console</label>
   <input type="text" id="prodConsoleInput" placeholder="Console" required>
-
 <div class="center">
   <button class="btn btn-default btn-addProd" type="submit">Aggiungi</button>
 </div>
 </form>
-
+</div>
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <!-- Include all compiled plugins (below), or include individual files as needed -->

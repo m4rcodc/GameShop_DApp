@@ -26,8 +26,6 @@ contract('GST_Token', function ([ creator, minter, other ]) {
     this.token = await SimpleTokenAC.new(NAME, SYMBOL, TOTAL_SUPPLY, { from: creator });
   });
 
-/*
-
   it('retrieve returns a value previously stored', async function () {
     // Use large integer comparisons
     expect(await this.token.totalSupply()).to.be.bignumber.equal(TOTAL_SUPPLY);
@@ -89,8 +87,6 @@ contract('GST_Token', function ([ creator, minter, other ]) {
     
     expect(await this.token.isMinter(minter)).to.equal(false);
   });
-
-  */
 
   it('check buyProduct from other with sufficient balance', async function () {
 
@@ -170,35 +166,4 @@ contract('GST_Token', function ([ creator, minter, other ]) {
     await expectRevert(this.token.addProduct("Crash Bandicoot 4", "https://m.media-amazon.com/images/I/61DCrgHKM3L._AC_SX385_.jpg", new BN('50'), "PlayStation 4", { from: other }), 'Restricted to admins');
     
   });
-  
-  it('Modify product from admin', async function () {
-
-    var result = await this.token.getAllProduct({ from: creator });
-
-    assert(result[0].name == "God Of War Ragnarok" && result[0].price == 70 && result[0].console == 'PlayStation 5');
-
-    const receipt1 = await this.token.modifyProdId(0, 'Crash Bandicoot', 50, 'Xbox Series X', { from: creator });
-
-    expectEvent(receipt1, 'CheckModify');
-
-
-    var result1 = await this.token.getAllProduct({ from: creator });
-
-    assert(result1[0].name == "Crash Bandicoot" && result1[0].price == 50 && result1[0].console == 'Xbox Series X');
-  
-  });
-
-  it('Modify product from other', async function () {
-
-    //L'account "other" acquista un gioco che paga 50
-    await expectRevert(this.token.modifyProdId(0, 'Crash Bandicoot', 50, 'Xbox Series X', { from: other }), 'Restricted to admins');
-
-  });
-
-
-
-
-
-  
-
 });

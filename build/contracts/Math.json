@@ -1,9 +1,9 @@
 {
   "contractName": "Math",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"details\":\"Standard math utilities missing in the Solidity language.\",\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"@openzeppelin/contracts/utils/math/Math.sol\":\"Math\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/utils/math/Math.sol\":{\"keccak256\":\"0x662311a467e936121c66b0afc797bc576098be1e1d21723d451299e5311d7489\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://ff086db82cb4e32909b039e98ebebb56f7d0a68467c445011a82a2907a668473\",\"dweb:/ipfs/QmVxRNiDzXXDqPYp3HNGjDvVfw8p5cwcX4FAb7caAJmcNz\"]}},\"version\":1}",
-  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220a985d89e32da8b0ea159baf26694224ccb6494ea5868a55e95429530d48eece864736f6c63430008110033",
-  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220a985d89e32da8b0ea159baf26694224ccb6494ea5868a55e95429530d48eece864736f6c63430008110033",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.18+commit.87f61d96\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"details\":\"Standard math utilities missing in the Solidity language.\",\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"@openzeppelin/contracts/utils/math/Math.sol\":\"Math\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/utils/math/Math.sol\":{\"keccak256\":\"0x662311a467e936121c66b0afc797bc576098be1e1d21723d451299e5311d7489\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://ff086db82cb4e32909b039e98ebebb56f7d0a68467c445011a82a2907a668473\",\"dweb:/ipfs/QmVxRNiDzXXDqPYp3HNGjDvVfw8p5cwcX4FAb7caAJmcNz\"]}},\"version\":1}",
+  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea264697066735822122037457a26dda3b73231a90a4fef86fa5fa973660a78da108a448409f1d4891e6664736f6c63430008120033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea264697066735822122037457a26dda3b73231a90a4fef86fa5fa973660a78da108a448409f1d4891e6664736f6c63430008120033",
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [],
@@ -1363,7 +1363,7 @@
                           }
                         ]
                       },
-                      "evmVersion": "london",
+                      "evmVersion": "paris",
                       "externalReferences": [
                         {
                           "declaration": 1415,
@@ -1780,7 +1780,7 @@
                           }
                         ]
                       },
-                      "evmVersion": "london",
+                      "evmVersion": "paris",
                       "externalReferences": [
                         {
                           "declaration": 1409,
@@ -2147,7 +2147,7 @@
                           }
                         ]
                       },
-                      "evmVersion": "london",
+                      "evmVersion": "paris",
                       "externalReferences": [
                         {
                           "declaration": 1409,
@@ -11669,11 +11669,11 @@
   },
   "compiler": {
     "name": "solc",
-    "version": "0.8.17+commit.8df45f5f.Emscripten.clang"
+    "version": "0.8.18+commit.87f61d96.Emscripten.clang"
   },
   "networks": {},
   "schemaVersion": "3.4.11",
-  "updatedAt": "2023-01-28T17:09:29.327Z",
+  "updatedAt": "2023-02-18T16:19:08.125Z",
   "devdoc": {
     "details": "Standard math utilities missing in the Solidity language.",
     "kind": "dev",

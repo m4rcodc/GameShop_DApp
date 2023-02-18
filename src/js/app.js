@@ -1,5 +1,4 @@
 let id;
-var owner;
 
 App = {
   web3Provider: null,
@@ -51,8 +50,6 @@ web3 = new Web3(App.web3Provider);
 
       loadProduct();
 
-      getOwnerContract();
-
     });
 
     return App.verifyAdmin();
@@ -77,14 +74,6 @@ web3 = new Web3(App.web3Provider);
 
         }).then(function(result) {
           
-          if(result != true){
-            console.log('I am here 1');
-            $('.btn-modify').css('display', 'none')
-          }
-          else {
-            $('.btn-modify').css('display', 'inline')
-          }
-
         }).catch(function(err) {
             alert("Error in the event" + err)
         });
@@ -98,8 +87,6 @@ web3 = new Web3(App.web3Provider);
   bindEvents: function() {
     console.log("Sono in bindEvents");
     $(document).on('click', '.btn-buyProd', App.handleBuyProduct);
-    $(document).on('click', '.btn-modify', App.handleModify);
-    $(document).on('click', '.btn-confirmModify', App.handleConfirmModify); 
   },
 
   handleBuyProduct:  function(event) {
@@ -123,7 +110,7 @@ web3 = new Web3(App.web3Provider);
 
 
         // Execute adopt as a transaction by sending account
-        return contractInstance.transfer(owner, price, {from : account});
+        return contractInstance.buyProduct(price, {from : account});
       }).then(function(result) {
         // return App.markAdopted();
         
@@ -131,64 +118,14 @@ web3 = new Web3(App.web3Provider);
         reloadBalance();
         
       }).catch(function(err) {
-        alert("Acquisto non riuscito");
+        alert("Acquisto non riuscito, token insufficienti");
         console.log(err.message);
       });
 
     });    
   },
-
-  handleModify:  function(event) {
-    event.preventDefault();
-    //console.log("Sono in handleModify");
-    id = parseInt($(event.target).data('id'));
-    var priceProduct = parseInt($(event.target).data('prezzo'));
-    var consoleProduct = $(event.target).data('console');
-    var nameProduct = $(event.target).data('name');
-    
-    console.log(nameProduct + " prezzo: " + priceProduct + " Console:" + consoleProduct);
-
-    console.log("id" + id);
-
-    nameMd.value = nameProduct;
-    priceMd.value = priceProduct;
-    consoleMd.value = consoleProduct;
-  
-  },
-
-  handleConfirmModify: function(event) {
-
-    event.preventDefault();
-
-    var nameProduct = nameMd.value;
-    var priceProduct = priceMd.value;
-    var consoleProduct = consoleMd.value;
-
-    var contractInstance;
-
-    web3.eth.getAccounts(function(error, accounts) {
-      if (error) {
-        console.log(error);
-      }
-    
-      var account = accounts[0];
-
-      App.contracts.GST_Token.deployed().then(function(instance) {
-        contractInstance = instance;
-          
-
-        return contractInstance.modifyProdId(id,nameProduct,priceProduct,consoleProduct, {from: account});
-      }).then(function(result) {
-        
-        console.log("Modifica riuscita");
-        
-      }).catch(function(err) {
-        console.log(err.message);
-      });
-
-    });
-  },
 }
+
 $(function() {
   $(window).load(function() {
     App.init();
@@ -275,44 +212,7 @@ function  loadProduct()  {
  
 }
 
-function getOwnerContract(){
 
-
-  
-  web3.eth.getAccounts(function(error, accounts) {
-    if (error) {
-      console.log(error);
-    }
-  
-    var account = accounts[0];
-
-    App.contracts.GST_Token.deployed().then(function(instance) {
-      contractInstance = instance;
-    
-      // Execute adopt as a transaction by sending account
-      return contractInstance.getOwner.call({from:account});
-    }).then(function(result) {
-      // return App.markAdopted();
-      owner = result;
-      return result;
-
-
-    }).catch(function(err) {
-      console.log(err.message);
-    });
-
-  }); 
-
-}
-
-function openModal() {
-  console.log("Sono in openModal");
-  document.getElementById("modal-form").classList.add("show");
-}
-
-function closeModal() {
-  document.getElementById("modal-form").hide();
-}
 
 
 
